@@ -1,14 +1,19 @@
-define(['pixi', 'lodash'], function (pixi, _) {
+define([
+    'pixi',
+    'lodash',
+    'models/InputCollector',
+    'models/Stage'
+], function (pixi, _, InputCollector, Stage) {
 
     function Game(socket) {
         this.socket = socket;
-        this.registerInputCollection();
-        this.registerServerInteraction();
+        this.inputCollector = new InputCollector(socket);
+//        this.stage = new Stage(socket);
     }
 
     Game.prototype.registerInputCollection = function() {
-        //window.addEventListener('keydown', _.throttle(onKeyDown, 200));
-        //window.addEventListener('keyup', _.throttle(onKeyUp, 200));
+        window.addEventListener('keydown', _.throttle(this.onKeyDown, 200));
+        window.addEventListener('keyup', _.throttle(this.onKeyUp, 200));
     };
 
     Game.prototype.registerServerInteraction = function() {

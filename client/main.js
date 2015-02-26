@@ -8,6 +8,6 @@ require.config({
 
 });
 
-require(['Game', 'socket'], function (Game, socket) {
+require(['models/Game', 'socket'], function (Game, socket) {
     var game = new Game(socket);
 });
