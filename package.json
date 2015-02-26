@@ -1,0 +1,19 @@
+{
+  "name": "ShootahJS",
+  "version": "1.0.0",
+  "description": "JS online 2d shooter",
+  "main": "index.js",
+  "scripts": {
+    "test": "test",
+    "start": "node ./app"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "serve-static": "^1.9.1",
+    "socket.io": "^1.3.4"
+  },
+  "devDependencies": {
+    "mocha": "^2.1.0"
+  }
+}
