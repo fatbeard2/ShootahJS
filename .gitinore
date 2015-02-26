@@ -1,4 +1,0 @@
-.gitignore
-node_modules
-client/scripts/bower_components
-.idea
