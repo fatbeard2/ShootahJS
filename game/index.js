@@ -7,12 +7,16 @@ function Game(options) {
 
 util.inherits(Game, EventEmitter);
 
-Game.prototype.init = function () {
+Game.prototype.init = function (io) {
     var self = this;
-    self.emit('init');
+    self.emit('game.init');
     setInterval(function () {
-        self.emit('frame', {data: 'hi im frame'});
+        io.emit('/game/frame', {data: 'frame_data'});
     }, 200);
+    io.on('player.move', function (data) {
+        console.warn(data);
+    })
+
 };
 
 module.exports = Game;
