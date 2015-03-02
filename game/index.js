@@ -5,8 +5,6 @@ var playersCount = 0;
 function Game(options) {
 }
 
-
-
 Game.prototype.init = function (io) {
     this.io = io;
     io.emit('game.init');
@@ -21,14 +19,19 @@ Game.prototype.init = function (io) {
 };
 
 Game.prototype.addPlayer = function (socket) {
-    players[socket.id] = new Player(socket);
-    console.warn('connected ' + socket.id + '. Total players: ' + ++playersCount);
+    var newPlayer = new Player(socket);
     this.setEventListeners(socket);
-    this.io.emit('game.new_player', {x: players[socket.id].getX(), y: players[socket.id].getY()} )
+    this.io.emit('game.newPlayer', newPlayer.clientData() );
+    for (var id in players) {
+        if(players[id]) socket.emit('game.newPlayer', players[id].clientData());
+    }
+    players[socket.id] = newPlayer;
+    console.warn('connected ' + socket.id + '. Total players: ' + ++playersCount);
 };
 
 
 Game.prototype.removePlayer = function (socket) {
+    this.io.emit('game.playerLeft', {id: socket.id} );
     players[socket.id] = undefined;
     console.warn('disconnected ' + socket.id + '. Total players: ' + --playersCount);
 };
@@ -50,7 +53,7 @@ Game.prototype.getFrame = function () {
         players: []
     };
     for (var id in players) {
-        if (players[id]) frame.players.push({x: players[id].getX(), y: players[id].getY()});
+        if(players[id]) frame.players.push(players[id].clientData());
     }
     //console.dir(frame);
     return frame;

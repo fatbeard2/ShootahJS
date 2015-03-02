@@ -14,8 +14,12 @@ define(['models/InputCollector','models/Stage'], function (InputCollector, Stage
             this.stage.update(frame);
         }).bind(this));
 
-        this.socket.on('game.new_player', (function (player) {
+        this.socket.on('game.newPlayer', (function (player) {
             this.stage.addPlayer(player);
+        }).bind(this));
+
+        this.socket.on('game.playerLeft', (function (player) {
+            this.stage.removePlayer(player.id);
         }).bind(this));
     }
 

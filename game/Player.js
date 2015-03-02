@@ -38,5 +38,15 @@ Player.prototype.increaseY = function (dy) {
     return this.setY(this.getY() + dy);
 };
 
+Player.prototype.clientData = function () {
+    return {
+        position: {
+            x: this.getX(),
+            y: this.getY()
+        },
+        id: this.id
+    };
+};
+
 
 module.exports = Player;

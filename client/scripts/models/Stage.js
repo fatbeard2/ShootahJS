@@ -23,10 +23,15 @@ define(['pixi'], function (PIXI) {
         this.players[player.id] = {id: player.id, avatar: graphics};
     };
 
+    Stage.prototype.removePlayer = function (id) {
+        this.stage.removeChild(this.players[id].avatar);
+        this.players[id] = undefined;
+    };
+
     Stage.prototype.update = function (frame) {
         frame.players.forEach(function (player) {
-            this.players[player.id].avatar.position.x = player.x;
-            this.players[player.id].avatar.position.y = player.y;
+            this.players[player.id].avatar.position.x = player.position.x;
+            this.players[player.id].avatar.position.y = player.position.y;
         }, this);
     };
 
