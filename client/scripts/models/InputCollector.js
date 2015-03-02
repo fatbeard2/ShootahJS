@@ -39,7 +39,7 @@ define(['lodash', 'models/Direction'], function (_, Direction) {
         }
     };
 
-    InputCollector.prototype.onInputUpdate = function (callback) {
+    InputCollector.prototype.onDirectionUpdate = function (callback) {
         this.directionUpdateHandlers.push(callback);
     };
 
@@ -59,9 +59,9 @@ define(['lodash', 'models/Direction'], function (_, Direction) {
             dx = 0;
         }
         if (directionButtonsPressed['down'] === true && directionButtonsPressed['up'] === false) {
-            dy = -1;
-        } else if (directionButtonsPressed['down'] === false && directionButtonsPressed['up'] === true) {
             dy = 1;
+        } else if (directionButtonsPressed['down'] === false && directionButtonsPressed['up'] === true) {
+            dy = -1;
         } else{
             dy = 0;
         }
