@@ -6,9 +6,8 @@ define(['pixi', '_'], function (PIXI, _) {
         this.stage = new PIXI.stage(0xFFFFFF);
         this.renderer = PIXI.autoDetectRenderer(800, 800);
         this.avatars = [];
-        this.world.players.forEach(this.addPlayer.bind(this));
-        this.world.on('playerJoin', this.addPlayer.bind(this));
-        this.world.on('playerExit', this.removePlayer.bind(this));
+        this.world.on('world.player.join', this.addPlayer.bind(this));
+        this.world.on('world.player.leave', this.removePlayer.bind(this));
         document.body.appendChild(this.renderer.view);
         this.draw();
     }
