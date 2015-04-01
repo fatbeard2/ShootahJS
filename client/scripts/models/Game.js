@@ -8,7 +8,7 @@ define(['models/InputCollector','models/WorldRenderer','models/GameWorld'], func
         this.world = new GameWorld();
         this.worldRenderer = new WorldRenderer(this.world);
         this.world.addPlayer();
-
+        'test'
         this.inputCollector.onDirectionUpdate((function (direction) {
             this.socket.emit('world.player.move', direction);
             this.world.processDirectionInput(this.client, direction);
