@@ -3,21 +3,24 @@ define([], function () {
     var eventListeners = {};
     function GameWorld() {
         this.players = {};
-
     }
 
     GameWorld.prototype.addPlayer = function (player) {
-        this.emit('world.player.join');
+        this.emit('world.player.join', player);
         this.players[player.id] = player;
     };
 
-    GameWorld.prototype.removePlayer = function (player) {
-        this.emit('world.player.join');
-        this.players[player.id] = null;
+    GameWorld.prototype.removePlayerById = function (playerId) {
+        this.emit('world.player.leave', playerId);
+        this.players[playerId] = null;
     };
 
-    GameWorld.prototype.processDirectionInput = function (direction) {
+    GameWorld.prototype.getPlayerById = function (playerId) {
+        return this.players[playerId];
+    };
 
+    GameWorld.prototype.processDirectionInput = function (playerId, direction) {
+        this.getPlayerById(playerId).move(direction);
     };
 
     GameWorld.prototype.restoreStateFromSnapshot = function (snapshot) {
@@ -34,10 +37,10 @@ define([], function () {
     };
 
     GameWorld.prototype.emit = function (eventName, data) {
-        if(!eventListeners[eventName]) {
+        if(eventListeners[eventName]) {
             eventListeners[eventName].forEach(function (listener) {
                 setTimeout(function () {
-                    listener.call(data);
+                    listener(data);
                 }, 0);
             });
         }

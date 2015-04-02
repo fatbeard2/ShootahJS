@@ -7,10 +7,9 @@ function Game(options) {
 
 Game.prototype.init = function (io) {
     this.io = io;
-    io.emit('game.init');
 
     setInterval((function () {
-        io.emit('game.frame', this.getFrame());
+        io.emit('world.frame', this.getFrame());
     }).bind(this), 100);
 
     io.on('connect', (function (socket) {
@@ -21,17 +20,15 @@ Game.prototype.init = function (io) {
 Game.prototype.addPlayer = function (socket) {
     var newPlayer = new Player(socket);
     this.setEventListeners(socket);
-    this.io.emit('game.newPlayer', newPlayer.clientData() );
-    for (var id in players) {
-        if(players[id]) socket.emit('game.newPlayer', players[id].clientData());
-    }
+    this.io.emit('world.player.join', newPlayer.clientData() );
+    socket.emit('world.player.init', newPlayer.clientData() );
     players[socket.id] = newPlayer;
     console.warn('connected ' + socket.id + '. Total players: ' + ++playersCount);
 };
 
 
 Game.prototype.removePlayer = function (socket) {
-    this.io.emit('game.playerLeft', {id: socket.id} );
+    this.io.emit('world.player.leave', {id: socket.id} );
     players[socket.id] = undefined;
     console.warn('disconnected ' + socket.id + '. Total players: ' + --playersCount);
 };
@@ -42,7 +39,7 @@ Game.prototype.setEventListeners = function (socket) {
         self.removePlayer(socket);
     });
 
-    socket.on('player.move', function (data) {
+    socket.on('world.player.move', function (data) {
         players[socket.id].increaseX(data.x);
         players[socket.id].increaseY(data.y);
     });

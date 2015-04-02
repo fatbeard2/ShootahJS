@@ -1,35 +1,35 @@
-define(['models/InputCollector','models/WorldRenderer','models/GameWorld'], function (InputCollector, WorldRenderer, GameWorld) {
+define(['models/InputCollector','models/WorldRenderer','models/GameWorld','models/Player'], function (InputCollector, WorldRenderer, GameWorld, Player) {
     'use strict';
 
     function Game(socket) {
-        this.client = null;
-        this.socket = socket;
-        this.inputCollector = new InputCollector();
-        this.world = new GameWorld();
-        this.worldRenderer = new WorldRenderer(this.world);
-        this.world.addPlayer();
-        'test'
-        this.inputCollector.onDirectionUpdate((function (direction) {
-            this.socket.emit('world.player.move', direction);
-            this.world.processDirectionInput(this.client, direction);
-        }).bind(this));
+        var clientGame = this;
+        clientGame.client = null;
+        clientGame.socket = socket;
+        clientGame.inputCollector = new InputCollector();
+        clientGame.world = new GameWorld();
+        clientGame.worldRenderer = new WorldRenderer(clientGame.world);
 
-        this.socket.on('game.init', (function () {
-            this.client = new Player();
-            this.world.addPlayer(this.client);
-        }).bind(this));
+        clientGame.socket.on('world.frame', function (snapshot) {
+            clientGame.world.restoreStateFromSnapshot(snapshot);
+        });
 
-        this.socket.on('world.frame', (function (snapshot) {
-            this.world.restoreStateFromSnapshot(snapshot);
-        }).bind(this));
+        clientGame.socket.on('world.player.join', function (player) {
+            var newPlayer = new Player(player.id);
+            clientGame.world.addPlayer(newPlayer);
+        });
 
-        this.socket.on('world.player.join', (function (player) {
-            this.world.addPlayer(player);
-        }).bind(this));
+        clientGame.socket.on('world.player.leave', function (player) {
+            clientGame.world.removePlayerById(player.id);
+        });
+        
+        clientGame.socket.on('world.player.init', function (player) {
+            clientGame.clientId = player.id;
+            clientGame.inputCollector.onDirectionUpdate(function (direction) {
+                clientGame.socket.emit('world.player.move', direction);
+                clientGame.world.processDirectionInput(clientGame.clientId, direction);
+            });
+        });
 
-        this.socket.on('world.player.leave', (function (player) {
-            this.world.removePlayer(player);
-        }).bind(this));
     }
 
     return Game;

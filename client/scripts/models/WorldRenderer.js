@@ -1,11 +1,11 @@
-define(['pixi', '_'], function (PIXI, _) {
+define(['pixi'], function (PIXI) {
     'use strict';
 
     function WorldRenderer(worldInstance) {
         this.world = worldInstance;
-        this.stage = new PIXI.stage(0xFFFFFF);
+        this.avatars = {};
+        this.stage = new PIXI.Stage;
         this.renderer = PIXI.autoDetectRenderer(800, 800);
-        this.avatars = [];
         this.world.on('world.player.join', this.addPlayer.bind(this));
         this.world.on('world.player.leave', this.removePlayer.bind(this));
         document.body.appendChild(this.renderer.view);
@@ -18,7 +18,7 @@ define(['pixi', '_'], function (PIXI, _) {
         graphics.lineStyle(5, 0xFF0000);
         graphics.drawCircle(player.x, player.y, 10);
         this.stage.addChild(graphics);
-        this.avatars.push = { player: player, avatar: graphics }; //todo add some Avatar class
+        this.avatars[player.id] = { player: player, body: graphics };
     };
 
     WorldRenderer.prototype.removePlayer = function (player) {
@@ -26,6 +26,11 @@ define(['pixi', '_'], function (PIXI, _) {
     };
 
     WorldRenderer.prototype.draw = function() {
+        for (var id in this.avatars) {
+            var current = this.avatars[id];
+            current.body.x = current.player.x;
+            current.body.y = current.player.y;
+        }
         this.renderer.render(this.stage);
         requestAnimationFrame(this.draw.bind(this));
     };
