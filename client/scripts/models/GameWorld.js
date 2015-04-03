@@ -1,17 +1,41 @@
-define([], function () {
+define(['physicsjs'], function (Physics) {
     'use strict';
+    //todo maybe rename into World class
     var eventListeners = {};
     function GameWorld() {
-        this.players = {};
+        var world = this;
+        world.players = {};
+        world.simulation = Physics();
+        world.hieght = 500;
+        world.width = 500;
+        var viewportBounds = Physics.aabb(0, 0, world.width, world.hieght);
+        var edgeCollisions = Physics.behavior('edge-collision-detection', {
+            aabb: viewportBounds,
+            restitution: 0.1,
+            cof: 0.8
+        });
+        world.simulation.add([
+            Physics.behavior('constant-acceleration'),
+            Physics.behavior('body-impulse-response'),
+            Physics.behavior('body-collision-detection'),
+            Physics.behavior('sweep-prune'),
+            edgeCollisions
+        ]);
+        Physics.util.ticker.on(function( time, dt ){
+            world.simulation.step( time );
+        });
+        Physics.util.ticker.start();
     }
 
     GameWorld.prototype.addPlayer = function (player) {
         this.emit('world.player.join', player);
+        this.simulation.add(player.body);
         this.players[player.id] = player;
     };
 
     GameWorld.prototype.removePlayerById = function (playerId) {
         this.emit('world.player.leave', playerId);
+        this.simulation.remove(this.getPlayerById(playerId).body);
         this.players[playerId] = null;
     };
 
@@ -45,7 +69,6 @@ define([], function () {
             });
         }
     };
-
 
     return GameWorld;
 });

@@ -1,17 +1,21 @@
-define([], function () {
+define(['physicsjs'], function (Physics) {
     'use strict';
 
     function Player(id, spec) {
         spec = spec || {};
         this.id = id;
-        this.x = spec.x || 0;
-        this.y = spec.y || 0;
-        this.velocity = spec.velocity || 0;
+        this.body = Physics.body('circle', {
+            x: spec.x || 0,
+            y:  spec.y || 0,
+            vx: spec.vx || 0,
+            vy: spec.vy || 0,
+            radius: 20
+        });
     }
 
     Player.prototype.move = function (direction) {
-        this.x += direction.x;
-        this.y += direction.y;
+        this.body.state.vel.x += direction.x;
+        this.body.state.vel.y += direction.y;
     };
 
 
