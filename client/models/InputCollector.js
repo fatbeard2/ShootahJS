@@ -1,4 +1,4 @@
-define(['lodash', 'models/Direction'], function (_, Direction) {
+define(['physicsjs'], function (Physics) {
     'use strict';
 
     var directionCodes = {
@@ -66,7 +66,7 @@ define(['lodash', 'models/Direction'], function (_, Direction) {
             dy = 0;
         }
 
-        return new Direction(dx, dy);
+        return new Physics.vector(dx, dy );
     };
 
 
