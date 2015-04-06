@@ -1,4 +1,4 @@
-define(['models/InputCollector','models/WorldRenderer','models/GameWorld','models/Player'], function (InputCollector, WorldRenderer, GameWorld, Player) {
+define(['models/InputCollector', 'models/WorldRenderer', 'common/World', 'common/Player'], function (InputCollector, WorldRenderer, GameWorld, Player) {
     'use strict';
 
     function Game(socket) {

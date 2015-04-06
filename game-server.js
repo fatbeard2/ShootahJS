@@ -1,4 +1,4 @@
-var Game = require('./game');
+var Game = require('./server/Game');
 
 module.exports = function (config) {
     var port = config['socket-io-port'];

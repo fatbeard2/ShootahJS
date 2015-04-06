@@ -1,15 +1,7 @@
-if (typeof define !== 'function') {
-    var Physics = require('../common/physicsjs/dist/physicsjs-full.js');
-    module.exports = WorldDefinition(Physics);
-} else {
-    define(['physicsjs'], WorldDefinition)
-}
-
-function WorldDefinition(Physics) {
-    'use strict';
-    
+define(['physicsjs'], function (Physics) {
     function World() {
         var world = this;
+        world.eventListeners = {};
         world.players = {};
         world.simulation = Physics();
         world.hieght = 500;
@@ -59,5 +51,21 @@ function WorldDefinition(Physics) {
     World.prototype.takeSnapShot = function (snapshot) {
     };
 
+    //todo move to separate class
+    World.prototype.on = function (eventName, callback) {
+        if(!this.eventListeners[eventName]) this.eventListeners[eventName] = [];
+        this.eventListeners[eventName].push(callback);
+    };
+
+    World.prototype.emit = function (eventName, data) {
+        if(this.eventListeners[eventName]) {
+            this.eventListeners[eventName].forEach(function (listener) {
+                setTimeout(function () {
+                    listener(data);
+                }, 0);
+            });
+        }
+    };
+
     return World;
-}
+});
