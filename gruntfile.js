@@ -15,7 +15,7 @@ module.exports = function(grunt) {
         },
         shell: {
             bower_install: {
-                command: 'bower install'
+                command: 'node ./node_modules/.bin/bower install'
             },
             npm_install: {
                 command: 'npm install'

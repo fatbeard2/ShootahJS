@@ -1,11 +1,9 @@
-var requirejs = require('requirejs');
-
-requirejs.config({
-    baseUrl: __dirname,
-    nodeRequire: require,
+require = require('amdrequire');
+require.config({
     paths: {
-        'physicsjs': 'common/libs/dist/physics'
-    }
+        'physicsjs': 'common/libs/physicsjs/dist/physicsjs'
+    },
+    basePath: __dirname
 });
 var config = {
     'socket-io-port': 1339,
@@ -13,7 +11,7 @@ var config = {
 };
 
 var gameServer = require('./game-server');
-var staticServer = require('./static-server');
+var staticServer = require('./static-server.js');
 
 gameServer(config);
 staticServer(config);
