@@ -1,3 +1,4 @@
+if (typeof define !== 'function') { var define = require('amdefine')(module); }
 define(['physicsjs'], function (Physics) {
     'use strict';
 
@@ -16,6 +17,10 @@ define(['physicsjs'], function (Physics) {
     Player.prototype.move = function (direction) {
         this.body.state.vel.x += direction.x;
         this.body.state.vel.y += direction.y;
+    };
+
+    Player.prototype.clientData = function () {
+        return this.body.state;
     };
 
 

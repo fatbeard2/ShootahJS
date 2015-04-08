@@ -1,5 +1,5 @@
-var Player = require('../common/Player');
-var World = require('../common/World');
+var Player = require('../common').Player;
+var World = require('../common').World;
 
 var players = {};
 var playersCount = 0;
@@ -8,7 +8,6 @@ function Game(options) {}
 
 Game.prototype.init = function (io) {
     this.io = io;
-
     setInterval((function () {
         io.emit('world.frame', this.getFrame());
     }).bind(this), 100);
@@ -41,8 +40,7 @@ Game.prototype.setEventListeners = function (socket) {
     });
 
     socket.on('world.player.move', function (data) {
-        players[socket.id].increaseX(data.x);
-        players[socket.id].increaseY(data.y);
+        players[socket.id].move(data);
     });
 };
 
@@ -53,10 +51,7 @@ Game.prototype.getFrame = function () {
     for (var id in players) {
         if(players[id]) frame.players.push(players[id].clientData());
     }
-    //console.dir(frame);
     return frame;
 };
-
-return Game;
 
 module.exports = Game;

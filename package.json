@@ -10,7 +10,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "amdrequire": "0.0.3",
+    "amdefine": "^0.1.0",
     "connect": "^3.3.5",
     "requirejs": "^2.1.17",
     "serve-static": "^1.9.2",

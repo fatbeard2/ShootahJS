@@ -1,3 +1,4 @@
+if (typeof define !== 'function') { var define = require('amdefine')(module); }
 define(['physicsjs'], function (Physics) {
     function World() {
         var world = this;
@@ -46,6 +47,7 @@ define(['physicsjs'], function (Physics) {
     };
 
     World.prototype.restoreStateFromSnapshot = function (snapshot) {
+        console.warn(snapshot);
     };
 
     World.prototype.takeSnapShot = function (snapshot) {
