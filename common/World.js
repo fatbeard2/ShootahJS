@@ -27,30 +27,40 @@ define(['physicsjs'], function (Physics) {
     }
 
     World.prototype.addPlayer = function (player) {
-        this.emit('world.player.join', player);
-        this.simulation.add(player.body);
-        this.players[player.id] = player;
+        var world = this;
+        world.simulation.add(player.body);
+        world.players[player.id] = player;
     };
 
     World.prototype.removePlayerById = function (playerId) {
-        this.emit('world.player.leave', playerId);
-        this.simulation.remove(this.getPlayerById(playerId).body);
-        this.players[playerId] = null;
+        var world = this;
+        world.simulation.remove(world.getPlayerById(playerId).body);
+        delete world.players[playerId];
     };
 
     World.prototype.getPlayerById = function (playerId) {
-        return this.players[playerId];
+        var world = this;
+        return world.players[playerId];
     };
 
     World.prototype.processDirectionInput = function (playerId, direction) {
-        this.getPlayerById(playerId).move(direction);
+        var world = this;
+        world.getPlayerById(playerId).move(direction);
     };
 
     World.prototype.restoreStateFromSnapshot = function (snapshot) {
-        console.warn(snapshot);
+        var world = this;
     };
 
-    World.prototype.takeSnapShot = function (snapshot) {
+    World.prototype.takeSnapShot = function () {
+        var world = this;
+        var frame = { players: [] };
+        for (var id in world.players) {
+            if (world.players.hasOwnProperty(id)) {
+                frame.players.push(world.players[id].serialize());
+            }
+        }
+        return frame;
     };
 
     //todo move to separate class

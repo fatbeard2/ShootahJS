@@ -4,24 +4,28 @@ var World = require('../common').World;
 var players = {};
 var playersCount = 0;
 
-function Game(options) {}
-
-Game.prototype.init = function (io) {
+function Game(io) {
     this.io = io;
+    global.requestAnimationFrame = function () {
+        debugger
+    }
+    this.world = new World();
     setInterval((function () {
-        io.emit('world.frame', this.getFrame());
+        io.emit('world.frame', this.world.takeSnapShot());
     }).bind(this), 100);
 
     io.on('connect', (function (socket) {
         this.addPlayer(socket);
     }).bind(this));
-};
+}
+
 
 Game.prototype.addPlayer = function (socket) {
-    var newPlayer = new Player(socket);
+    var newPlayer = new Player(socket.id);
+    this.world.addPlayer(newPlayer);
     this.setEventListeners(socket);
-    this.io.emit('world.player.join', newPlayer.clientData() );
-    socket.emit('world.player.init', newPlayer.clientData() );
+    this.io.emit('world.player.join', newPlayer.serialize() );
+    socket.emit('world.player.init', newPlayer.serialize() );
     players[socket.id] = newPlayer;
     console.warn('connected ' + socket.id + '. Total players: ' + ++playersCount);
 };
@@ -29,7 +33,7 @@ Game.prototype.addPlayer = function (socket) {
 
 Game.prototype.removePlayer = function (socket) {
     this.io.emit('world.player.leave', {id: socket.id} );
-    players[socket.id] = undefined;
+    this.world.removePlayerById(socket.id);
     console.warn('disconnected ' + socket.id + '. Total players: ' + --playersCount);
 };
 
@@ -40,18 +44,9 @@ Game.prototype.setEventListeners = function (socket) {
     });
 
     socket.on('world.player.move', function (data) {
-        players[socket.id].move(data);
+        self.world.processDirectionInput(socket.id, data);
     });
 };
 
-Game.prototype.getFrame = function () {
-    var frame = {
-        players: []
-    };
-    for (var id in players) {
-        if(players[id]) frame.players.push(players[id].clientData());
-    }
-    return frame;
-};
 
 module.exports = Game;

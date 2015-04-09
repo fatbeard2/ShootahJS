@@ -1,4 +1,4 @@
-define(['physicsjs'], function (Physics) {
+define([], function () {
     'use strict';
 
     var directionCodes = {
@@ -66,7 +66,7 @@ define(['physicsjs'], function (Physics) {
             dy = 0;
         }
 
-        return new Physics.vector(dx, dy );
+        return { x: dx, y: dy };
     };
 
 

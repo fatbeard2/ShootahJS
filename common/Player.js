@@ -14,13 +14,19 @@ define(['physicsjs'], function (Physics) {
         });
     }
 
-    Player.prototype.move = function (direction) {
-        this.body.state.vel.x += direction.x;
-        this.body.state.vel.y += direction.y;
+    Player.prototype.move = function (vector) {
+        this.body.state.vel.x += vector.x * 0.1;
+        this.body.state.vel.y += vector.y * 0.1;
+        console.warn('vx is ' + this.body.state.vel.x);
+        console.warn('vy is ' + this.body.state.vel.y);
     };
 
-    Player.prototype.clientData = function () {
-        return this.body.state;
+    Player.prototype.serialize = function () {
+        var player = this;
+        return {
+            state: player.body.state,
+            id: player.id
+        }
     };
 
 

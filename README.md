@@ -1,9 +1,11 @@
 # ShootahJS
 npm install
 
+bower install
+
 npm run
 
-goto localhost:8080
+goto [http://localhost:8081/](http://localhost:8081/)
 
 try out game
 
