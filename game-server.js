@@ -1,3 +1,7 @@
+var animationLoop;
+global.requestAnimationFrame = function (func) {
+    if(!animationLoop) animationLoop = setInterval(func, 17);
+};
 var Game = require('./server/Game');
 
 module.exports = function (config) {

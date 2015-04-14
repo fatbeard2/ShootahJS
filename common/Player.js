@@ -17,8 +17,8 @@ define(['physicsjs'], function (Physics) {
     Player.prototype.move = function (vector) {
         this.body.state.vel.x += vector.x * 0.1;
         this.body.state.vel.y += vector.y * 0.1;
-        console.warn('vx is ' + this.body.state.vel.x);
-        console.warn('vy is ' + this.body.state.vel.y);
+        console.warn('vx is ' + this.body.state.pos.x);
+        console.warn('vy is ' + this.body.state.pos.y);
     };
 
     Player.prototype.serialize = function () {

@@ -7,7 +7,7 @@ define(['models/InputCollector', 'models/WorldRenderer', 'common/World', 'common
         clientGame.socket = socket;
         clientGame.inputCollector = new InputCollector();
         clientGame.world = new GameWorld();
-        //clientGame.worldRenderer = new WorldRenderer(clientGame.world);
+        clientGame.worldRenderer = new WorldRenderer(clientGame.world);
         clientGame.socket.on('world.player.init', function (player) {
             clientGame.setEventListeners(player);
             var newPlayer = new Player(player.id);

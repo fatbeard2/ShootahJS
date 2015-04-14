@@ -6,9 +6,6 @@ var playersCount = 0;
 
 function Game(io) {
     this.io = io;
-    global.requestAnimationFrame = function () {
-        debugger
-    }
     this.world = new World();
     setInterval((function () {
         io.emit('world.frame', this.world.takeSnapShot());
