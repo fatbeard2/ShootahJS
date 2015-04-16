@@ -1,5 +1,10 @@
-define(['models/InputCollector', 'models/WorldRenderer', 'common/World', 'common/Player'], function (InputCollector, WorldRenderer, GameWorld, Player) {
+define(function (require) {
     'use strict';
+    var Physics = require('common/libs/physicsjs/dist/physicsjs-full');
+    var InputCollector = require('models/InputCollector');
+    var WorldRenderer = require('models/WorldRenderer');
+    var GameWorld = require('common/World');
+    var Player = require('common/Player');
 
     function Game(socket) {
         var clientGame = this;
@@ -9,15 +14,19 @@ define(['models/InputCollector', 'models/WorldRenderer', 'common/World', 'common
         clientGame.world = new GameWorld();
         clientGame.worldRenderer = new WorldRenderer(clientGame.world);
         clientGame.socket.on('world.player.init', function (player) {
+            clientGame.clientId = player.id;
             clientGame.setEventListeners(player);
             var newPlayer = new Player(player.id);
             clientGame.world.addPlayer(newPlayer);
         });
+        Physics.util.ticker.on(function (time, dt) {
+            clientGame.world.simulation.step(time);
+        });
+        Physics.util.ticker.start();
     }
 
     Game.prototype.setEventListeners = function (player) {
         var clientGame = this;
-        clientGame.clientId = player.id;
         clientGame.socket.on('world.frame', function (snapshot) {
             clientGame.world.restoreStateFromSnapshot(snapshot);
         });

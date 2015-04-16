@@ -1,5 +1,5 @@
-var Player = require('../common').Player;
-var World = require('../common').World;
+var Player = require('../common/Player');
+var World = require('../common/World');
 
 var players = {};
 var playersCount = 0;
@@ -8,8 +8,12 @@ function Game(io) {
     this.io = io;
     this.world = new World();
     setInterval((function () {
-        io.emit('world.frame', this.world.takeSnapShot());
-    }).bind(this), 100);
+        this.world.simulation.step(Date.now());
+    }).bind(this), 17);
+
+    setInterval((function () {
+        this.io.emit('world.frame', this.world.takeSnapShot());
+    }).bind(this), 50);
 
     io.on('connect', (function (socket) {
         this.addPlayer(socket);
