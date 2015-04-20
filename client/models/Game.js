@@ -16,7 +16,7 @@ define(function (require) {
         clientGame.socket.on('world.player.init', function (player) {
             clientGame.clientId = player.id;
             clientGame.setEventListeners(player);
-            var newPlayer = new Player(player.id);
+            var newPlayer = new Player(player.id, player);
             clientGame.world.addPlayer(newPlayer);
         });
         Physics.util.ticker.on(function (time, dt) {
@@ -32,7 +32,7 @@ define(function (require) {
         });
 
         clientGame.socket.on('world.player.join', function (player) {
-            var newPlayer = new Player(player.id);
+            var newPlayer = new Player(player.id, player);
             clientGame.world.addPlayer(newPlayer);
         });
 
