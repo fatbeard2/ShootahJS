@@ -1,3 +1,3 @@
 define(['io'], function (io) {
-    return io('http://localhost:1339');
+    return io('http://localhost:8081');
 });

@@ -31,9 +31,9 @@
         };
 
         Player.prototype.updateState = function (newState) {
-            this.body.state.pos = new Physics.vector(newState.body.state.pos);
-            this.body.state.vel = new Physics.vector(newState.body.state.vel);
-            this.body.state.acc = new Physics.vector(newState.body.state.acc);
+            this.body.state.pos = Physics.vector(newState.body.state.pos);
+            this.body.state.vel = Physics.vector(newState.body.state.vel);
+            this.body.state.acc = Physics.vector(newState.body.state.acc);
         };
 
         Player.initialState = function () {

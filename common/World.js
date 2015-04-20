@@ -2,6 +2,7 @@
 
     define(function (require) {
         var Physics = require('./libs/physicsjs/dist/physicsjs-full');
+        var Player = require('./Player');
 
         function World() {
             var world = this;
@@ -50,7 +51,13 @@
         World.prototype.restoreStateFromSnapshot = function (snapshot) {
             var world = this;
             snapshot.players.forEach(function (playerState) {
-                world.getPlayerById(playerState.id).updateState(playerState);
+                var playerToUpdate = world.getPlayerById(playerState.id);
+                if (playerToUpdate) {
+                    playerToUpdate.updateState(playerState);
+                } else {
+                    var newPlayer = new Player(playerState.id, playerState);
+                    world.addPlayer(newPlayer);
+                }
             })
         };
 
