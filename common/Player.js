@@ -34,6 +34,7 @@
             this.body.state.pos = Physics.vector(newState.body.state.pos);
             this.body.state.vel = Physics.vector(newState.body.state.vel);
             this.body.state.acc = Physics.vector(newState.body.state.acc);
+            this.body.state.angular = newState.body.state.angular;
         };
 
         Player.initialState = function () {
@@ -42,7 +43,12 @@
                     state: {
                         pos: Physics.vector(0, 0),
                         vel: Physics.vector(0, 0),
-                        acc: Physics.vector(0, 0)
+                        acc: Physics.vector(0, 0),
+                        angular: {
+                            pos: 0,
+                            vel: 0,
+                            acc: 0
+                        }
                     }
                 }
             }

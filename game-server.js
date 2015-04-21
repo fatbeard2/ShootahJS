@@ -1,20 +1,24 @@
 var Game = require('./server/Game');
-var serveStatic = require('serve-static');
+var express = require('express');
+var http = require('http');
 
 module.exports = function (config) {
     var port = config['app-port'];
-    var server = require('connect')(),
-        serveClientDirectory = serveStatic('./client'),
-        serveCommonDirectory = serveStatic('./common');
 
-    var io = require('socket.io')(server);
+    var app = express();
+    app
+        .use(express.static('client'))
+        .use('/common', express.static('common'));
+
+
+    var server = http.createServer(app);
+    var io = require('socket.io').listen(server);
     var game = new Game(io);
-    server
-        .use(serveClientDirectory)
-        .use('/common', serveCommonDirectory)
-        .listen(port);
 
-    console.log('Static server up and running on port ' + config['static-server-port']);
+    server.listen(port, function () {
+        console.log('Game server up and running on port ' + port);
+    });
+
 };
 
 
