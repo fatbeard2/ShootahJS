@@ -1,11 +1,13 @@
 # ShootahJS
-npm install
 
-bower install
+This is currently a prototype for some online browser game with shooting(in-future)
 
-npm run
+To run the game do the following:
 
-goto [http://localhost:8081/](http://localhost:8081/)
+`npm install`
 
-try out game
+`grunt`
 
+`npm run`
+
+goto [http://localhost:8081/](http://localhost:8081/) and try out game

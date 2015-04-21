@@ -16,9 +16,6 @@ module.exports = function(grunt) {
         shell: {
             bower_install: {
                 command: 'node ./node_modules/.bin/bower install'
-            },
-            npm_install: {
-                command: 'npm install'
             }
         },
         copy: {
@@ -36,6 +33,6 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-copy');
     grunt.loadNpmTasks('grunt-shell');
 
-    grunt.registerTask('default', ['shell:bower_install', 'shell:npm_install', 'copy:common']);
+    grunt.registerTask('default', ['shell:bower_install', 'copy:common']);
 
 };
