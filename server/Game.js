@@ -5,19 +5,22 @@ var players = {};
 var playersCount = 0;
 
 function Game(io) {
-    this.io = io;
-    this.world = new World();
-    setInterval((function () {
-        this.world.simulation.step(Date.now());
-    }).bind(this), 17);
+    var self = this;
+    self.io = io;
+    self.world = new World();
+    setInterval(function () {
+        self.world.simulation.step(Date.now());
+    }, 17);
 
-    setInterval((function () {
-        this.io.emit('world.frame', this.world.takeSnapShot());
-    }).bind(this), 50);
+    setInterval(function () {
+        setTimeout((function (frame) { //simulating ping
+            self.io.emit('world.frame', frame);
+        }).bind(self, self.world.takeSnapShot()), 500);
+    }, 50);
 
-    io.on('connect', (function (socket) {
-        this.addPlayer(socket);
-    }).bind(this));
+    io.on('connect', function (socket) {
+        self.addPlayer(socket);
+    });
 }
 
 

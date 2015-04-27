@@ -42,7 +42,7 @@ define(function (require) {
 
         clientGame.inputCollector.onDirectionUpdate(function (direction) {
             clientGame.socket.emit('world.player.move', direction);
-            clientGame.world.processDirectionInput(clientGame.clientId, direction);
+            //clientGame.world.processDirectionInput(clientGame.clientId, direction);
         });
     };
 

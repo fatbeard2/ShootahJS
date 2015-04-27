@@ -69,6 +69,7 @@
                     frame.players.push(world.players[id].serialize());
                 }
             }
+            frame.time = Date.now();
             return frame;
         };
 
